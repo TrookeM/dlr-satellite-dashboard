@@ -1,0 +1,41 @@
+name: Despliegue a Servidor Casero 🛰️
+
+on:
+  push:
+    branches:
+      - main 
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 1. Clonar el código
+        uses: actions/checkout@v4
+
+      - name: ⚙️ 2. Instalar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 📦 3. Instalar dependencias
+        run: npm install
+
+      - name: 🛠️ 4. Compilar el proyecto (Build)
+        run: npm run build
+
+      - name: 🔐 5. Conectar GitHub a tu red Tailscale
+        uses: tailscale/github-action@v2
+        with:
+          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+
+      - name: 🚀 6. Enviar al Servidor Casero vía SSH
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          port: 22 
+          source: "dist/*"
+          target: "~/dlr-satellite-dashboard"
+          strip_components: 1
