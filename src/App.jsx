@@ -20,7 +20,7 @@ function App() {
 
   // EL MOTOR EN TIEMPO REAL
   useEffect(() => {
-    // Iniciamos un temporizador que se dispara cada 2 segundos
+    // Iniciamos un temporizador que se dispara cada 5 segundos
     const heartbeat = setInterval(() => {
 
       // Actualizamos el estado de los satélites
