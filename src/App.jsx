@@ -1,22 +1,52 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AreaChart, Area, XAxis, Tooltip, ResponsiveContainer } from 'recharts';
 
 function App() {
 
   const [satellites, setSatellites] = useState([
     {
-      id: 1, name: 'Galileo-1', status: 'Online', battery: 85,
-      telemetry: [{ time: '10:00', temp: 15 }, { time: '11:00', temp: 18 }, { time: '12:00', temp: 16 }]
+      id: 1, name: 'Galileo-1', status: 'Online', battery: 99,
+      telemetry: [{ time: '10:00:00', temp: 15 }, { time: '11:00:00', temp: 18 }, { time: '12:00:00', temp: 16 }]
     },
     {
       id: 2, name: 'Kepler-X', status: 'Maintenance', battery: 40,
-      telemetry: [{ time: '10:00', temp: 22 }, { time: '11:00', temp: 28 }, { time: '12:00', temp: 35 }]
+      telemetry: [{ time: '10:00:00', temp: 22 }, { time: '11:00:00', temp: 28 }, { time: '12:00:00', temp: 35 }]
     },
     {
       id: 3, name: 'Voyager-1', status: 'Maintenance', battery: 16,
-      telemetry: [{ time: '10:00', temp: -50 }, { time: '11:00', temp: -55 }, { time: '12:00', temp: -60 }]
+      telemetry: [{ time: '10:00:00', temp: -50 }, { time: '11:00:00', temp: -55 }, { time: '12:00:00', temp: -60 }]
     },
   ]);
+
+  // EL MOTOR EN TIEMPO REAL
+  useEffect(() => {
+    // Iniciamos un temporizador que se dispara cada 2 segundos
+    const heartbeat = setInterval(() => {
+
+      // Actualizamos el estado de los satélites
+      setSatellites(currentSats => currentSats.map(sat => {
+        // 1. Calculamos el nuevo dato de temperatura
+        const lastData = sat.telemetry[sat.telemetry.length - 1];
+        const newTemp = lastData.temp + (Math.random() * 4 - 2); // Sube o baja hasta 2 grados
+
+        // 2. Calculamos la hora actual exacta (segundos incluidos)
+        const newTime = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+        // 3. Añadimos el dato nuevo al historial (y borramos los viejos para que la gráfica no sea infinita)
+        const updatedTelemetry = [
+          ...sat.telemetry.slice(-5), // Nos quedamos solo con los últimos 5 registros
+          { time: newTime, temp: Math.round(newTemp) } // Añadimos el nuevo
+        ];
+
+        // 4. Devolvemos el satélite actualizado
+        return { ...sat, telemetry: updatedTelemetry };
+      }));
+
+    }, 5000); // 5000 milisegundos = 5 segundos
+
+    // Limpieza al cerrar
+    return () => clearInterval(heartbeat);
+  }, []);
 
   return (
     <>
