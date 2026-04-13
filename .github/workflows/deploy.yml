@@ -27,7 +27,9 @@ jobs:
       - name: 🔐 5. Conectar GitHub a tu red Tailscale
         uses: tailscale/github-action@v2
         with:
-          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:ci
 
       - name: 🚀 6. Enviar al Servidor Casero vía SSH
         uses: appleboy/scp-action@v0.1.7
