@@ -37,5 +37,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22 
           source: "dist/*"
-          target: "~/dlr-satellite-dashboard"
+          target: "/home/trookem/dlr-satellite-dashboard"
           strip_components: 1
