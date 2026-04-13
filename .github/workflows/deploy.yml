@@ -29,6 +29,9 @@ jobs:
         with:
           authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
 
+      - name: 📡 5.5. Prueba de Sonar (Ping al NAS)
+        run: ping -c 4 ${{ secrets.SERVER_HOST }}
+
       - name: 🚀 6. Enviar al Servidor Casero vía SSH
         uses: appleboy/scp-action@v0.1.7
         with:
