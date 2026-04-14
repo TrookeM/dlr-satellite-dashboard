@@ -1,4 +1,4 @@
-name: Despliegue a Servidor Casero 🛰️
+name: Despliegue al Servidor Público 🌍
 
 on:
   push:
@@ -18,21 +18,12 @@ jobs:
         with:
           node-version: '20'
 
-      - name: 📦 3. Instalar dependencias
-        run: npm install
+      - name: 📦 3. Instalar dependencias y Compilar
+        run: |
+          npm install
+          npm run build
 
-      - name: 🛠️ 4. Compilar el proyecto (Build)
-        run: npm run build
-
-      - name: 🔐 5. Conectar GitHub a tu red Tailscale
-        uses: tailscale/github-action@v2
-        with:
-          authkey: ${{ secrets.TAILSCALE_AUTHKEY }}
-
-      - name: 📡 5.5. Prueba de Sonar (Ping al NAS)
-        run: ping -c 4 ${{ secrets.SERVER_HOST }}
-
-      - name: 🚀 6. Enviar al Servidor Casero vía SSH
+      - name: 🚀 4. Desplegar al VPS Público via SSH
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.SERVER_HOST }}
@@ -40,5 +31,5 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22 
           source: "dist/*"
-          target: "/home/trookem/dlr-satellite-dashboard"
+          target: "/root/dlr-satellite-dashboard"
           strip_components: 1
