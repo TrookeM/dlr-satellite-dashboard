@@ -80,7 +80,7 @@ Mientras se gestionan los permisos de IT para la instalación de Node.js, utiliz
     </script>
 </body>
 </html>
-
+```
 📅 Hoja de Ruta del Proyecto (Plan Semanal)
 Semanas 1-2: Setup del Entorno y Puente React-Lit
 Gestión IT: Conseguir permisos e instalar Node.js, dependencias (npm install) y configurar el IDE.
