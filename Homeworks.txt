@@ -1,0 +1,25 @@
+Es normalísimo sentir que no sabes nada al cambiar de paradigma. Pasar del mundo de React puro a construir Web Components nativos con Lit requiere cambiar el "chip" mental, pero la curva de aprendizaje es muy rápida.
+Como ahora mismo tienes el entorno de pruebas montado con CDNs y tu servidor local de Python, es el momento perfecto para experimentar sin miedo a romper nada.
+Aquí tienes tu "plan de estudios" estructurado en misiones. Ve marcándolas a tu ritmo:
+### 🎒 Misión 1: Entender el "Shadow DOM" (La base de todo)
+En React, todo vive en el mismo árbol del documento (DOM). En los Web Components, encapsulamos el código para que los estilos no se filtren.
+ * [ ] **Teoría:** Busca qué es el **Light DOM** vs **Shadow DOM**. Entiende por qué un CSS global no afecta a lo que hay dentro de tu componente.
+ * [ ] **Práctica en tu PoC:** Intenta cambiar el color de fondo de tu <div id="chart"> usando una etiqueta <style> normal en el index.html. Verás que no funciona. Luego, cámbialo dentro del static styles = css...` de Lit para ver la diferencia de encapsulamiento.
+### 🎒 Misión 2: Dominar Lit (El motor reactivo)
+Lit hace lo mismo que React (actualizar la vista cuando cambian los datos), pero usando estándares web.
+ * [ ] **Teoría:** Lee en la documentación de Lit sobre **Reactive Properties** (properties) y el **Ciclo de vida** (especialmente firstUpdated y updated).
+ * [ ] **Práctica en tu PoC:** 1. Añade una propiedad reactiva a tu componente llamada chartTitle (por defecto "Mi primer gráfico").
+   2. Haz que ese título se pinte en el HTML justo encima del gráfico (<h2>${this.chartTitle}</h2>).
+   3. Cambia el atributo desde el index.html así: <vvafer-line-chart chartTitle="Datos de VVAFER"></vvafer-line-chart> y mira cómo se actualiza automáticamente.
+### 🎒 Misión 3: Jugar con KorUI (Los bloques de construcción)
+KorUI usa un concepto fundamental de los Web Components llamado **Slots** (ranuras). Es como el children de React, pero mucho más potente.
+ * [ ] **Teoría:** Entra en la web oficial de KorUI y revisa cómo se estructuran componentes como <kor-card> o <kor-modal>. Busca qué significa el atributo slot.
+ * [ ] **Práctica en tu PoC:** 1. Mete tu <vvafer-line-chart> dentro de una <kor-card>.
+   2. Añade un botón <kor-button> y asígnale slot="header". Verás cómo mágicamente se coloca en la cabecera de la tarjeta en lugar de en el cuerpo.
+### 🎒 Misión 4: Destripar Apache ECharts (El visualizador)
+ECharts no sabe nada de Lit ni de React, solo entiende de un div con dimensiones y un objeto de configuración (llamado option).
+ * [ ] **Teoría:** Busca ejemplos básicos en la web de Apache ECharts y fíjate en la estructura del objeto option (tiene xAxis, yAxis, series).
+ * [ ] **Práctica en tu PoC:** 1. Cambia el tipo de gráfico: en el objeto de configuración, busca donde dice type: 'line' y cámbialo a type: 'bar'. Guarda y recarga.
+   2. Modifica el array de datos data: [120, 200...] por números inventados y observa cómo se redibuja al instante.
+Estas cuatro misiones son todo lo que necesitas para perderle el miedo al código y entender cómo encajan las tres piezas antes de meterte en la lógica dura de refactorizar.
+¿Por cuál de estas cuatro misiones te gustaría empezar para que hagamos un micro-ejercicio de código ahora mismo y lo pruebes en tu escritorio?
