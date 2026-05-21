@@ -8,44 +8,106 @@ Volver a levantar el archivo index.html con los CDNs correctos de KorUI (v1.11.3
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>VVAFER Sandbox - Reconstrucción Base</title>
-    
+    <title>VVAFER Sandbox - Hito 2</title>
     <link href="https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/kor-styles.min.css" rel="stylesheet">
-    
     <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
-    
     <style>
-        body { 
-            font-family: sans-serif; 
-            padding: 2rem; 
-            background-color: #f4f5f7; 
-            margin: 0;
-        }
-        .dashboard-layout {
-            max-width: 1000px;
-            margin: 0 auto;
-        }
+        body { font-family: sans-serif; padding: 2rem; background-color: #f4f5f7; margin: 0; }
+        .dashboard-layout { max-width: 1000px; margin: 0 auto; }
     </style>
 </head>
 <body>
 
     <div class="dashboard-layout">
-        <kor-card label="VVAFER Framework - Hito 1" icon="developer_board">
-            <div slot="header">
-                </div>
-            
-            <p>El entorno base está listo. Próximo paso: Crear el componente de Lit.</p>
+        <vvafer-data-socket id="datasource"></vvafer-data-socket>
+
+        <kor-card label="VVAFER Framework - Hito 2 (Data Socket)" icon="cloud_download">
+            <p>El motor de datos centralizado (Data Socket) ya está cargado en memoria y procesando el estado.</p>
         </kor-card>
     </div>
 
     <script type="module">
         import "https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/components/card/index.min.js";
         import "https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/components/icon/index.min.js";
-        import "https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/components/button/index.min.js";
     </script>
 
-    </body>
+    <script type="module" src="./src/components/VvaferDataSocket.js"></script>
+
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const socket = document.getElementById('datasource');
+            // Escuchamos el evento que creamos dentro del componente Lit
+            socket.addEventListener('vvafer-data-changed', (e) => {
+                console.log("📡 Data Socket actualizado:", e.detail);
+            });
+            
+            // Forzamos un log inicial simulando un cambio
+            console.log("📊 Datos iniciales procesados (Satélite Alfa):", socket.getProcessedData());
+        });
+    </script>
+</body>
 </html>
+
+ { LitElement } from 'https://cdn.jsdelivr.net/gh/lit/dist@3/core/lit-core.min.js';
+
+export class VvaferDataSocket extends LitElement {
+    static get properties() {
+        return {
+            currentSatellite: { type: String }
+        };
+    }
+
+    constructor() {
+        super();
+        this.currentSatellite = 'Alfa'; // Filtro por defecto
+        
+        // Simulación de los datos crudos que llegarían de la API del DLR
+        this.rawData = [
+            { fecha: 'Lun', satelite: 'Alfa', valor: 150 },
+            { fecha: 'Mar', satelite: 'Alfa', valor: 230 },
+            { fecha: 'Mié', satelite: 'Alfa', valor: 224 },
+            { fecha: 'Jue', satelite: 'Alfa', valor: 218 },
+            { fecha: 'Vie', satelite: 'Alfa', valor: 135 },
+            { fecha: 'Lun', satelite: 'Beta', valor: 85 },
+            { fecha: 'Mar', satelite: 'Beta', valor: 140 },
+            { fecha: 'Mié', satelite: 'Beta', valor: 90 },
+            { fecha: 'Jue', satelite: 'Beta', valor: 180 },
+            { fecha: 'Vie', satelite: 'Beta', valor: 210 }
+        ];
+    }
+
+    // Como es un componente de datos puramente lógico, anulamos el Shadow DOM 
+    // para poder comunicarnos fácilmente mediante eventos estándar en el Light DOM.
+    createRenderRoot() {
+        return this;
+    }
+
+    // 🌟 LA FUNCIÓN CLAVE: Filtra los datos crudos y devuelve solo el formato estructurado
+    // que necesita Apache ECharts (un array de números con los valores).
+    getProcessedData() {
+        return this.rawData
+            .filter(item => item.satelite === this.currentSatellite)
+            .map(item => item.valor);
+    }
+
+    // Cada vez que el filtro cambie, disparamos un evento personalizado hacia arriba
+    // para avisar a la aplicación de que hay nuevos datos disponibles.
+    updated(changedProperties) {
+        if (changedProperties.has('currentSatellite')) {
+            this.dispatchEvent(new CustomEvent('vvafer-data-changed', {
+                detail: {
+                    satellite: this.currentSatellite,
+                    data: this.getProcessedData()
+                },
+                bubbles: true,
+                composed: true
+            }));
+        }
+    }
+}
+
+customElements.define('vvafer-data-socket', VvaferDataSocket);
+
 
 
 📍 Hito 2: El "Data Socket" (El Motor de Datos)
