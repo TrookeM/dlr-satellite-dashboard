@@ -1,6 +1,52 @@
 🗺️ Hoja de Ruta de Desarrollo (VVAFER Sandbox)
+
 📍 Hito 1: El Escenario Base (Reconstrucción)
 Volver a levantar el archivo index.html con los CDNs correctos de KorUI (v1.11.3) y ECharts, estructurando el proyecto en carpetas locales para poder trabajar de forma modular con el servidor de Python.
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VVAFER Sandbox - Reconstrucción Base</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/kor-styles.min.css" rel="stylesheet">
+    
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+    
+    <style>
+        body { 
+            font-family: sans-serif; 
+            padding: 2rem; 
+            background-color: #f4f5f7; 
+            margin: 0;
+        }
+        .dashboard-layout {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        <kor-card label="VVAFER Framework - Hito 1" icon="developer_board">
+            <div slot="header">
+                </div>
+            
+            <p>El entorno base está listo. Próximo paso: Crear el componente de Lit.</p>
+        </kor-card>
+    </div>
+
+    <script type="module">
+        import "https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/components/card/index.min.js";
+        import "https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/components/icon/index.min.js";
+        import "https://cdn.jsdelivr.net/npm/@kor-ui/kor@1.11.3/components/button/index.min.js";
+    </script>
+
+    </body>
+</html>
+
 
 📍 Hito 2: El "Data Socket" (El Motor de Datos)
 Crear el componente que actuará como el núcleo central de la arquitectura según el paper. No pinta nada en pantalla; su único trabajo es almacenar el estado de los datos, filtrar por filas/columnas y suministrar la información a las gráficas.
